@@ -28,7 +28,7 @@
   },
   "dependencies": {
     "@etclabscore/json-schema-to-types": "^1.11.2",
-    "@open-rpc/meta-schema": "@open-rpc/meta-schema",
+    "@open-rpc/meta-schema": "^1.11.0",
     "commander": "^5.0.0"
   }
 }
