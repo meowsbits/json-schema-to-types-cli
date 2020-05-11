@@ -4,24 +4,24 @@ A very tiny CLI wrapper around https://github.com/etclabscore/json-schema-to-typ
 
 Generates code from a json schema. Output is printed to standard out.
 
-Supported target languages include:
-- Go: `--language=go`
-- Rust: `--language=rs`
-- Python: `--language=py`
-- Typescript: `--language=ts`
+Supported target targets include:
+- Go: `--target=go`
+- Rust: `--target=rs`
+- Python: `--target=py`
+- Typescript: `--target=ts`
 
 ## Usage
 
 Pass a file containing a JSON Schema as the program argument.
 
 ```sh
-$ json-schema-to-types-cli --language=go schema.json
+$ json-schema-to-types-cli --target=go schema.json
 ```
 
 Pass a JSON Schema via a standard input pipe.
 
 ```sh
-$ cat schema.json | json-schema-to-types-cli --language=rs
+$ cat schema.json | json-schema-to-types-cli --target=rs
 ```
 
 ## Install
@@ -37,6 +37,6 @@ $ npm i && npm link
 [./testdata/type-string.json](./testdata/type-string.json) contains a very simple JSON Schema.
 
 ```sh
-$ json-schema-to-types-cli --language=go ./testdata/type-string.json
+$ json-schema-to-types-cli --target=go ./testdata/type-string.json
 type StringDoaGddGA string
 ```

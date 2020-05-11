@@ -7,7 +7,7 @@ const { program } = require('commander');
 const fs = require('fs');
 
 program.version("0.0.1");
-program.option("-l, --language <lang>", "transpilation target language" )
+program.option("-l, --target <target>", "transpilation target language" )
 program.option("-v, --verbose", "verbose logging");
 program.parse(process.argv);
 
@@ -58,13 +58,13 @@ function handleData(input: string) {
   const s = JSON.parse(input) as JSONSchema;
   const transpiler = new JsonSchemaToTypes(s);
 
-    if (typeof(program.language) === "undefined" || program.language === "") {
-        console.log("missing language target option");
+    if (typeof(program.target) === "undefined" || program.target === "") {
+        console.log("missing target target option");
         program.help();
         process.exit(2);
     }
 
-    const target = program.language;
+    const target = program.target;
     if (target === "rs") {
         console.log(transpiler.toRust());
     } else if (target === "go") {
@@ -74,7 +74,7 @@ function handleData(input: string) {
     }  else if (target === "py") {
         console.log(transpiler.toPython());
     } else {
-        console.log("invalid language target");
+        console.log("invalid target");
         program.help();
         process.exit(2);
     }
