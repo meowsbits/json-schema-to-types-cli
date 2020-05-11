@@ -7,24 +7,24 @@ import {JsonSchemaToTypes} from "@etclabscore/json-schema-to-types";
 import {JSONSchema} from "@open-rpc/meta-schema";
 
 program.version("0.0.1");
-program.option("-l, --target <target>", "target language")
+program.option("-l, --target <target>", "target language [rs|go|ts|py]")
 program.option("-v, --verbose", "verbose logging");
 program.parse(process.argv);
 
 let args = program.args;
-let input = args[0];
+let firstArg = args[0];
 let isTTY = process.stdin.isTTY;
 let stdin = process.stdin;
 
 if (isTTY && args.length === 0) {
   program.help();
 } else if (isTTY && args.length !== 0) {
-  handleShellArguments();
+  handleArguments();
 } else {
-  handlePipedContent();
+  handlePipe();
 }
 
-function handlePipedContent() {
+function handlePipe() {
   let data = '';
   stdin.on('readable', function () {
     let chuck = stdin.read();
@@ -37,21 +37,26 @@ function handlePipedContent() {
   });
 }
 
-function handleShellArguments() {
-  let rawData = fs.readFileSync(input);
-  handleData(rawData);
+function handleArguments() {
+  let fileData = fs.readFileSync(firstArg);
+  handleData(fileData);
+}
+
+function exitWithHelp(context:string) {
+  if (context.length > 0) {
+    console.log("error:", context);
+  }
+  program.help();
+  process.exit(2);
 }
 
 function handleData(input: string) {
-  if (input === "") {
-    program.help();
-    process.exit(2);
+  if (input.length < 1) {
+    exitWithHelp("input was empty");
   }
 
   if (typeof (program.target) === "undefined" || program.target === "") {
-    console.log("missing target target option");
-    program.help();
-    process.exit(2);
+    exitWithHelp("missing target target option");
   }
 
   const s = JSON.parse(input) as JSONSchema;
@@ -72,9 +77,7 @@ function handleData(input: string) {
       console.log(transpiler.toPython());
       return
     default:
-      console.log("invalid target");
-      program.help();
-      process.exit(2);
+      exitWithHelp("invalid target");
   }
 }
 
